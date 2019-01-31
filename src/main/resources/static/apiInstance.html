@@ -153,6 +153,7 @@
               $("#json").JSONView(data);
             },
             error:err=>{
+              console.log(err)
               $("#json").JSONView('{"msg": "the server responded with a status of 404 (Not Found)", "msg_show": "服务器的响应状态为404(未找到)"}');
             }
           });
