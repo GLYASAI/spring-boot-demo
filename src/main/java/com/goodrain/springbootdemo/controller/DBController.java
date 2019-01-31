@@ -1,16 +1,14 @@
 package com.goodrain.springbootdemo.controller;
 
 import com.goodrain.springbootdemo.service.DBInfoService;
-import com.goodrain.springbootdemo.util.DBConnPool;
 import com.goodrain.springbootdemo.vo.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -27,15 +25,7 @@ public class DBController {
         resp.setCode("1001");
         resp.setSuccess(0);
         resp.setMsg("ok");
-
-        DBConnPool dcp = DBConnPool.getInstance();
-        if (dcp == null) {
-            resp.setData(false);
-            return resp;
-        }
-
-        Connection conn = dcp.getConnection();
-        resp.setData(!conn.isClosed());
+        resp.setData(!dbInfoService.isClosed());
         return resp;
     }
 
@@ -43,9 +33,7 @@ public class DBController {
     @CrossOrigin(origins = "*")
     public RestResponse<List<String>> listTables() throws SQLException {
         List<String> list = dbInfoService.listTables();
-
         RestResponse<List<String>> resp = new RestResponse<>(0, "1002", "ok", list);
-
         return resp;
     }
 }
