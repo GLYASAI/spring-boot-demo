@@ -23,15 +23,19 @@ public class DBController {
     @GetMapping("is-connected")
     @CrossOrigin(origins = "*")
     public RestResponse<Boolean> isConnected() throws SQLException {
-        DBConnPool dcp = DBConnPool.getInstance();
-        Connection conn = dcp.getConnection();
-
         RestResponse<Boolean> resp = new RestResponse<>();
         resp.setCode("1001");
         resp.setSuccess(0);
         resp.setMsg("ok");
-        resp.setData(!conn.isClosed());
 
+        DBConnPool dcp = DBConnPool.getInstance();
+        if (dcp == null) {
+            resp.setData(false);
+            return resp;
+        }
+
+        Connection conn = dcp.getConnection();
+        resp.setData(!conn.isClosed());
         return resp;
     }
 

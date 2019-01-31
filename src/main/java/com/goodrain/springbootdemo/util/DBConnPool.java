@@ -55,7 +55,7 @@ public class DBConnPool {
         // 如果设为true那么在取得连接的同时将校验连接的有效性。Default: false
         cpds.setTestConnectionOnCheckin(true);
         // 定义在从数据库获取新的连接失败后重复尝试获取的次数，默认为30;
-        cpds.setAcquireRetryAttempts(30);
+        cpds.setAcquireRetryAttempts(3);
         /// 两次连接中间隔时间默认为1000毫秒
         cpds.setAcquireRetryDelay(1000);
             /* 获取连接失败将会引起所有等待获取连接的线程异常,
@@ -71,7 +71,17 @@ public class DBConnPool {
         if (dbConnection == null) {
             synchronized (DBConnPool.class) {
                 if (dbConnection == null) {
-                    dbConnection = new DBConnPool();
+                    DBConnPool dbcp = new DBConnPool();
+                    try {
+                        Connection conn = dbcp.getConnection();
+                        if (conn.isClosed()) {
+                            return null;
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                    dbConnection = dbcp;
                 }
             }
         }

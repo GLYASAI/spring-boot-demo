@@ -13,11 +13,14 @@ import java.util.List;
 
 @Repository
 public class DBInfoDaoImpl implements DBInfoDao {
-    @Autowired
-    public DBConnPool dcp;
 
     @Override
     public List<String> listTables(String db) throws SQLException {
+        DBConnPool dcp = DBConnPool.getInstance();
+        if (dcp == null) {
+            return new ArrayList<>();
+        }
+
         Connection conn = dcp.getConnection();
         DatabaseMetaData md = conn.getMetaData();
         ResultSet rs = md.getTables(db, null, "%", null);
