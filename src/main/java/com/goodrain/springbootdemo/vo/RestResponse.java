@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RestResponse<T> {
     @JsonProperty("success")
-    public int success;
+    private int success;
 
     @JsonProperty("code")
-    public String code;
+    private String code;
 
     @JsonProperty("msg")
-    public String msg;
+    private String msg;
 
     @JsonProperty("data")
-    public T data;
+    private T data;
 
     public RestResponse() {
     }
