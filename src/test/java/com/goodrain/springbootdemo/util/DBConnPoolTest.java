@@ -13,11 +13,7 @@ import java.sql.SQLException;
 public class DBConnPoolTest {
     @Test
     public void TestGetConnection() throws FileNotFoundException, SQLException {
-        URL resource = this.getClass().getResource("/db.properties");
-        Assert.assertNotNull("can't find db.properties", resource);
-        FileInputStream in = new FileInputStream(resource.getFile());
-
-        DBConnPool dcp = DBConnPool.getInstance(in);
+        DBConnPool dcp = DBConnPool.getInstance();
         Connection conn = dcp.getConnection();
         Assert.assertTrue("error connecting to mysql", !conn.isClosed());
     }

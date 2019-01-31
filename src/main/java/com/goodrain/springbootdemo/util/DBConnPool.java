@@ -4,11 +4,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
 import java.beans.PropertyVetoException;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class DBConnPool {
     private static volatile DBConnPool dbConnection;
@@ -17,17 +14,16 @@ public class DBConnPool {
     /**
      * 在构造函数初始化的时候获取数据库连接
      */
-    private DBConnPool(FileInputStream in) {
-        Properties properties = new Properties();
-        try {
-            properties.load(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String driverClassName = properties.getProperty("jdbc.driverClassName");
-        String url = properties.getProperty("jdbc.url");
-        String username = properties.getProperty("jdbc.username");
-        String password = properties.getProperty("jdbc.password");
+    private DBConnPool() {
+
+        String driverClassName = System.getenv("MYSQL_JDBC_DRIVER_CLASS_NAME").equals("")
+                ? "com.mysql.cj.jdbc.Driver" : System.getenv("MYSQL_JDBC_DRIVER_CLASS_NAME");
+        String url = "jdbc:mysql://"
+                + System.getenv("MYSQL_HOST") + ":"
+                + System.getenv("MYSQL_PORT") + "/"
+                + System.getenv("MYSQL_DATABASE") + "?characterEncoding=utf8";
+        String user = System.getenv("MYSQL_USER");
+        String password = System.getenv("MYSQL_PASSWORD");
 
         // 数据库连接池对象
         cpds = new ComboPooledDataSource();
@@ -37,7 +33,7 @@ public class DBConnPool {
             e.printStackTrace();
         }
         cpds.setJdbcUrl(url);
-        cpds.setUser(username);
+        cpds.setUser(user);
         cpds.setPassword(password);
 
         // 初始化时创建的连接数,应在minPoolSize与maxPoolSize之间取值.默认为3
@@ -71,11 +67,11 @@ public class DBConnPool {
     /**
      * 获取数据库连接对象，单例
      */
-    public static DBConnPool getInstance(FileInputStream in) {
+    public static DBConnPool getInstance() {
         if (dbConnection == null) {
             synchronized (DBConnPool.class) {
                 if (dbConnection == null) {
-                    dbConnection = new DBConnPool(in);
+                    dbConnection = new DBConnPool();
                 }
             }
         }
