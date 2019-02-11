@@ -12,13 +12,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/db")
+@RequestMapping("/dbinfo")
 public class DBController {
 
     @Autowired
     public DBInfoService dbInfoService;
 
-    @GetMapping("is-connected")
+    @GetMapping("ping")
     @CrossOrigin(origins = "*")
     public RestResponse<Boolean> isConnected() throws SQLException {
         RestResponse<Boolean> resp = new RestResponse<>();
