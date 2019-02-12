@@ -10,15 +10,12 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/proxy")
 public class ProxyController {
     @Autowired
     public ProxyService proxyService;
 
-    @RequestMapping(value = "/do", method = RequestMethod.POST, produces = "application/json")
-    public RestResponse<String> proxyGet(@Valid @RequestBody ProxyReqVO proxyReqVO) throws IOException {
-        String data = proxyService.doProxy(proxyReqVO.getUrl());
-        RestResponse<String> resp = new RestResponse<>(0, "2001", "ok", data);
-        return resp;
+    @RequestMapping(value = "/proxy", method = RequestMethod.POST, produces = "application/json")
+    public String proxyGet(@Valid @RequestBody ProxyReqVO proxyReqVO) throws IOException {
+        return proxyService.doProxy(proxyReqVO);
     }
 }
