@@ -1,14 +1,16 @@
 package com.goodrain.springbootdemo.controller;
 
 import com.goodrain.springbootdemo.service.FoobarService;
+import com.goodrain.springbootdemo.vo.GreetingReqVO;
 import com.goodrain.springbootdemo.vo.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/foobar")
 public class FoobarController {
     @Autowired
     private FoobarService foobarService;
@@ -21,6 +23,16 @@ public class FoobarController {
         res.setCode("3000");
         res.setMsg("");
         res.setData(envs);
+        return res;
+    }
+
+    @PostMapping("/greeting")
+    public RestResponse<String> greeting(@Valid @RequestBody GreetingReqVO greetingReqVO) {
+        RestResponse<String> res = new RestResponse<>();
+        res.setSuccess(0);
+        res.setCode("4000");
+        res.setMsg("");
+        res.setData(greetingReqVO.getName());
         return res;
     }
 }
