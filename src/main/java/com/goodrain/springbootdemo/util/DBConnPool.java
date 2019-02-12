@@ -23,7 +23,7 @@ public class DBConnPool {
                 + System.getenv("MYSQL_PORT") + "/"
                 + System.getenv("MYSQL_DATABASE") + "?characterEncoding=utf8";
         String user = System.getenv("MYSQL_USER");
-        String password = System.getenv("MYSQL_PASSWORD");
+        String password = System.getenv("MYSQL_PASS");
 
         // 数据库连接池对象
         cpds = new ComboPooledDataSource();
